@@ -10,7 +10,7 @@ def withdraw_interface(user, money):
         money2 = 1.05 * money
         user_dic["balance"] -= money2
         user_dic["flow"].append("提现成功，提现金额为%s，现有金额为%s" % (money, user_dic["balance"]))
-        logger.info("用户%s ：提现成功，提现金额为%s，现有金额为%s" % (user, money, user_dic["balance"]))
+        logger.info("用户 %s ：提现成功，提现金额为%s，现有金额为%s" % (user, money, user_dic["balance"]))
         db_handler.save(user_dic)
         return True, "提现成功，提现金额为%s，现有金额为%s" % (money, user_dic["balance"])
     else:
@@ -34,7 +34,7 @@ def transfer_interface(src_user, dst_user, money):
         return True, "转账成功，%s 转入 %s 金额 %s" % (src_user, dst_user, money)
     else:
         return False, "余额不足，转账失败"
-d
+
 
 def repay_interface(user, money):
     user_dic = db_handler.select(user)
