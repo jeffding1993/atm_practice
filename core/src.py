@@ -136,11 +136,68 @@ def check_shopping_cart():
     for k, num in user_shopping_cart_dic.items():
         print(goods_list[int(k)][0] + " 数量：" + str(num))
 
+
 # 10.注销
 @common.auth_register
 def logout():
     user_info = {}
     print("用户已注销")
+
+
+# 11.管理员登录
+def admin_login():
+    while True:
+        user = "admin"
+        pwd = input("请输入管理员密码：").strip()
+        flag, msg = user_interface.admin_login_interface(user, pwd)
+        if flag:
+            print(msg)
+            res = admin_func()
+            if not res:
+                logger = common.get_logger("admin_user")
+                logger.info("管理员已退出")
+                print("管理员已退出")
+                break
+
+        else:
+            print(msg)
+
+
+def admin_func():
+    while True:
+        option = input('''
+        1. 添加账户
+        2. 用户额度
+        3. 冻结账户
+        按q退出
+        ''')
+        if option == "q":
+            break
+        elif option in admin_func_map:
+            flag, msg = admin_func_map[option]()
+            if flag:
+                print(msg)
+                continue
+            else:
+                print(msg)
+        else:
+            print("错误输入请重新输入")
+
+
+def _admin_add_user():
+    user = input("需要添加的用户名：").strip()
+    pwd = input("添加的用户密码：").strip()
+    return user_interface.admin_add_user_interface(user, pwd)
+
+
+def _admin_change_user_balance():
+    user = input("需要修改额度的用户名：").strip()
+    balance = input("请输入用户的具体额度：").strip()
+    return user_interface.admin_change_user_interface(user, balance)
+
+
+def _admin_close_user():
+    pass
 
 
 func_map = {
@@ -153,7 +210,14 @@ func_map = {
     "7": check_flow,
     "8": shopping_cart,
     "9": check_shopping_cart,
-    "10": logout
+    "10": logout,
+    "11": admin_login
+}
+
+admin_func_map = {
+    '1': _admin_add_user,
+    '2': _admin_change_user_balance,
+    '3': _admin_close_user
 }
 
 
@@ -170,6 +234,7 @@ def run():
 8.购物车功能
 9.查看购物车
 10.注销
+11.管理员功能
 q.退出''')
 
         choice = input("请输入需要的功能（数字）：").strip()
