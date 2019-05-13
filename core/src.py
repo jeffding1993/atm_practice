@@ -197,7 +197,8 @@ def _admin_change_user_balance():
 
 
 def _admin_close_user():
-    pass
+    user = input("需要冻结的用户名：").strip()
+    return user_interface.admin_close_user_interface(user)
 
 
 func_map = {

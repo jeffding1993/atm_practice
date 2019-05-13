@@ -1,5 +1,7 @@
 from db import db_handler
 from lib.common import get_logger
+from conf.settings import db_path
+import os
 
 
 def register_interface(user, pwd):
@@ -63,3 +65,21 @@ def admin_change_user_interface(user, balance):
     logger = get_logger("admin_user")
     logger.info("修改用户：%s 额度为 %s " % (user, balance))
     return True, "修改用户：%s 额度为 %s " % (user, balance)
+
+
+def admin_close_user_interface(user):
+    dbfile = os.path.join(db_path, "%s.json" % user)
+    if not os.path.exists(dbfile):
+        return False, "需要冻结的用户：%s 不存在" % user
+    os.rename(dbfile, dbfile+".close")
+    logger = get_logger("admin_user")
+    logger.info("冻结用户：%s 成功" % user)
+    return True, "冻结用户：%s 成功" % user
+
+
+
+
+
+
+
+
